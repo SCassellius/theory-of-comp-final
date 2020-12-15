@@ -52,9 +52,13 @@ public class DFA{
                             break;
                         }
                     }
-                    if(canAdd) listTransitions.add(newT);
+                    if(canAdd){
+                        listTransitions.add(newT);
+                    }else{
+                        throw new IllegalArgumentException("There is a duplicate transition in the given list of transitions");
+                    }
                 }else{
-                    throw new IllegalArgumentException("The list of transitions contains an illegal transition");
+                    throw new IllegalArgumentException("The given list of transitions contains an illegal transition");
                 }
             }
         return listTransitions;
@@ -84,7 +88,16 @@ public class DFA{
     }
 
     private void testForIllegalTransitions(Set<Transition> transitions){
-        //TODO
+        Iterator it = this.listAllStates.iterator();
+        while(it.hasNext()){
+            String testState = (String)it.next();
+            Set<Integer> values = new HashSet<Integer>();
+            for(Transition t: this.listTransitions){
+                if(testState.equals(t.start)){
+                    if(values.add(t.value) == false) throw new IllegalArgumentException("There is an illegal or duplicate transition in the given list of transitions");
+                }
+            }
+        }
     }
 
 //    private DFA minimize(DFA dfa){

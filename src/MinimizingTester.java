@@ -22,7 +22,6 @@ public class MinimizingTester {
         badTransitions.add(new Transition("a", "b", 0));
         badTransitions.add(new Transition("a", "b", 1));
         badTransitions.add(new Transition("b", "c", 0));
-        badTransitions.add(new Transition("a", "b", 0));
 
         String[] goodStatesArray = new String[] {"A", "B", "C", "D", "E"};
         List goodStates = Arrays.asList(goodStatesArray);
