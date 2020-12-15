@@ -6,7 +6,7 @@ public class DFA{
     Set<String> listAcceptStates;
     HashMap<List<String[]>, Integer> transitions;
 
-    DFA(List<String> listStates, String startState, List<String> acceptStates, HashMap<List<String[]>, Integer> transitions) {
+    DFA(List<String> listStates, String startState, List<String> acceptStates, List<Transition> transitions) {
         this.listAllStates = cleanStates(listStates);
         this.startState = verifyStartState(startState);
         this.listAcceptStates = verifyAcceptStates(acceptStates);
