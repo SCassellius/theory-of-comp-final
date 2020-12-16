@@ -1,4 +1,3 @@
-import java.sql.SQLSyntaxErrorException;
 import java.util.*;
 
 public class DFA{
@@ -228,11 +227,26 @@ public class DFA{
 
 
             List<String> thisEQ = closeEquivalenceTree(workingEquivalenceTree);
-            //kEquivalenceTree.add(thisEQ);
+            kEquivalenceTree.add(thisEQ);
             if(thisEQ.equals(previousEQ)) break;
         }
 
-        //TODO recreate the DFA with minimized answers
+        //Now we put it all together to make a new, minimized DFA
+        List states = kEquivalenceTree.get(kEquivalenceTree.size() - 1);
+        while(states.contains("...")){
+            states.remove("...");
+        }
+
+        String start = dfa.startState;
+
+        //TODO work out list of accept states
+
+//        String[] acceptsArray = new String[] {"d", "e"};
+//        List accepts = Arrays.asList(acceptsArray);
+
+        //TODO work out list of transitions
+
+        //TODO assemble and return new DFA
 
 
         return null;
