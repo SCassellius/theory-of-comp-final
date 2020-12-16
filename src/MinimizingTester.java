@@ -235,6 +235,38 @@ public class MinimizingTester {
     }
 
     /**
+     * This test is to check that a list of lists of strings is correctly
+     * compiled into a list strings to store the levels
+     * of equivalence during DFA minimization
+     */
+    @Test
+    public void testcloseEquivalenceTree(){
+        final String SEPARATOR = "...";
+        String[] toadd = new String[]{"E", "G", SEPARATOR, "K", "M", "N", SEPARATOR, "A"};
+        List<String> correctAnswer = Arrays.asList(toadd);
+
+        List<List> open = new  ArrayList<List>();
+
+        List<String> list1 = new ArrayList<String>();
+        list1.add("E");
+        list1.add("G");
+        List<String> list2 = new ArrayList<String>();
+        list2.add("K");
+        list2.add("M");
+        list2.add("N");
+        List<String> list3 = new ArrayList<String>();
+        list3.add("A");
+
+        open.add(list1);
+        open.add(list2);
+        open.add(list3);
+
+        List<String> answerToTest = DFA.closeEquivalenceTree(open);
+
+        assertEquals(correctAnswer, answerToTest);
+    }
+
+    /**
      * This is the first minimization test, it is modeled after the in class example
      * from week 3, lecture 6. The example can been seen in its entirety in the README
      */

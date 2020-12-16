@@ -173,7 +173,7 @@ public class DFA{
         for(String str: eq) System.out.println(str);
 
         //Getting 1 equivalence
-        for(int i = 1; i < 2; i++) {
+        for(int i = 1; i < MINIMIZATION_LIMIT; i++) {
             kEquivalenceTree.add(new ArrayList<String>());
             List<String> previousEQ = kEquivalenceTree.get(i - 1);
             List<List> workingEquivalenceTree = openEquivalenceTree(previousEQ);
@@ -244,7 +244,7 @@ public class DFA{
      * separates them into a list of lists of strings to store the levels
      * of equivalence during DFA minimization. Each list is split
      * on "...".
-     * @param list the list or strings to be converted
+     * @param list the list of strings to be converted
      * @return a properly converted list of lists of strings
      */
     public static List<List> openEquivalenceTree(List<String> list) {
@@ -272,35 +272,25 @@ public class DFA{
     }
 
     /**
-     * The method opens a list of strings and correctly
-     * separates them into a list of lists of strings to store the levels
-     * of equivalence during DFA minimization. Each list is split
-     * on "...".
-     * @param list the list or strings to be converted
-     * @return a properly converted list of lists of strings
+     * This method closes a list of lists of stings into a list
+     * of strings that can be used to check against other layers of
+     * k-equivalence to see if i have completed the minimization
+     * @param list the list of lists of strings to be converted
+     * @return a properly converted list of strings
      */
     public static List<String> closeEquivalenceTree(List<List> list) {
         final String SEPARATOR = "...";
-        List<List> tree = new ArrayList<List>();
-        int startingPoint = 0;
-        int numberOfTables = Collections.frequency(list, SEPARATOR);
+        List<String> closedList = new ArrayList<String>();
 
-        for (int i = 0; i <= numberOfTables; i++) {
-            tree.add(new ArrayList<String>());
-            List<String> currentBranch = tree.get(i);
-
-            for (int j = startingPoint; j < list.size(); j++) {
-                String str = list.get(j);
-                if (!str.equals(SEPARATOR)) {
-                    currentBranch.add(str);
-                } else {
-                    startingPoint = j + 1;
-                    break;
-                }
+        for(List<String> listToClose: list){
+            for(String str: listToClose){
+                closedList.add(str);
             }
+            closedList.add(SEPARATOR);
         }
+        closedList.remove(closedList.size()-1);
 
-        return tree;
+        return closedList;
     }
 
     /**
