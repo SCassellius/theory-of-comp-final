@@ -1,3 +1,4 @@
+import java.sql.SQLSyntaxErrorException;
 import java.util.*;
 
 public class DFA{
@@ -144,7 +145,7 @@ public class DFA{
     }
 
     /**
-     * A k-equivalince DFA minimization method
+     * A k-equivalence DFA minimization method
      * @param dfa the DFA to minimize
      * @return a minimized dfa
      */
@@ -169,26 +170,116 @@ public class DFA{
          * This right here, officer.
          */
         List<String> eq = kEquivalenceTree.get(0);
-        //for(String str: eq) System.out.println(str);
+        for(String str: eq) System.out.println(str);
 
         //Getting 1 equivalence
-        for(int i = 1; i < MINIMIZATION_LIMIT; i++) {
+        for(int i = 1; i < 2; i++) {
             kEquivalenceTree.add(new ArrayList<String>());
             List<String> previousEQ = kEquivalenceTree.get(i - 1);
             List<List> workingEquivalenceTree = openEquivalenceTree(previousEQ);
 
+            System.out.println("\n\nLoop i: ");
+
+            for(int j = 0; j < workingEquivalenceTree.size(); j++) {
+                List<String> currentTable = workingEquivalenceTree.get(j);
+
+                System.out.println("Loop j: ");
+                for(String str: currentTable) System.out.println(str);
+
+                for(int k = 0; k < currentTable.size(); k++) {
+                    if(currentTable.size() <= 2) break;
+
+                    String testState = currentTable.get(k);
+
+                    System.out.println("Loop k: " + testState);
+
+                    String[] transitions = dfa.transitionTable.get(testState);
+
+                    System.out.println("t0: " + transitions[0] + "   t1: " + transitions[1]);
+
+                    if(currentTable.contains(transitions[0]) && currentTable.contains(transitions[1])) {
+                        continue;
+                    }else{
+                        currentTable.remove(testState);
+                        List<String> newList = new ArrayList<String>();
+                        newList.add(testState);
+                        workingEquivalenceTree.add(newList);
+                        k--;
+                        System.out.println("purged: " + testState + "       New table: ");
+                        for(String str: currentTable) System.out.println(str);
+                    }
+
+//                    for(int l = 0; l < workingEquivalenceTree.size(); l++) {
+//                        System.out.println("Loop l: ");
+//                    }
+                }
+            }
+            String answer = "";
+            for(List<String> list : workingEquivalenceTree){
+                for(String str: list){
+                    answer += str;
+                }
+                answer += SEPARATOR;
+            }
+            answer = answer.substring(0, answer.length() - 3);
+            System.out.println(answer);
 
 
 
-            List<String> thisEQ = kEquivalenceTree.get(i);
 
+            List<String> thisEQ = closeEquivalenceTree(workingEquivalenceTree);
+            //kEquivalenceTree.add(thisEQ);
+            if(thisEQ.equals(previousEQ)) break;
         }
+
+        //TODO recreate the DFA with minimized answers
 
 
         return null;
     }
 
+
+    /**
+     * The method opens a list of strings and correctly
+     * separates them into a list of lists of strings to store the levels
+     * of equivalence during DFA minimization. Each list is split
+     * on "...".
+     * @param list the list or strings to be converted
+     * @return a properly converted list of lists of strings
+     */
     public static List<List> openEquivalenceTree(List<String> list) {
+        final String SEPARATOR = "...";
+        List<List> tree = new ArrayList<List>();
+        int startingPoint = 0;
+        int numberOfTables = Collections.frequency(list, SEPARATOR);
+
+        for (int i = 0; i <= numberOfTables; i++) {
+            tree.add(new ArrayList<String>());
+            List<String> currentBranch = tree.get(i);
+
+            for (int j = startingPoint; j < list.size(); j++) {
+                String str = list.get(j);
+                if (!str.equals(SEPARATOR)) {
+                    currentBranch.add(str);
+                } else {
+                    startingPoint = j + 1;
+                    break;
+                }
+            }
+        }
+
+        return tree;
+    }
+
+    /**
+     * The method opens a list of strings and correctly
+     * separates them into a list of lists of strings to store the levels
+     * of equivalence during DFA minimization. Each list is split
+     * on "...".
+     * @param list the list or strings to be converted
+     * @return a properly converted list of lists of strings
+     */
+    public static List<String> closeEquivalenceTree(List<List> list) {
         final String SEPARATOR = "...";
         List<List> tree = new ArrayList<List>();
         int startingPoint = 0;
@@ -215,9 +306,10 @@ public class DFA{
     /**
      * This creates the transition table for 'this' DFA. It also check to make
      * sure that the DFA is complete, meaning that each state has a 0 and a 1 transition.
-     * @param listAllStates
-     * @param listTransitions
-     * @return
+     * @param listAllStates the set of all sate in the DFA
+     * @param listTransitions the set of all transitions for the DFA
+     * @return Key: state in question. Value: Value[0] = state transition to on zero,
+     * Value[1] = state transition to on 1
      */
     private Map<String,String[]> createTransitionTable(Set<String> listAllStates, Set<Transition> listTransitions){
         Map<String,String[]> tt = new HashMap<String,String[]>();

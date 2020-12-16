@@ -211,7 +211,7 @@ public class MinimizingTester {
 
     /**
      * This test is to check that a list of strings is correctly
-     * separated into a list of list of strings to store the levels
+     * separated into a list of lists of strings to store the levels
      * of equivalence during DFA minimization
      */
     @Test
@@ -281,6 +281,57 @@ public class MinimizingTester {
         minTransitions.add(new Transition("BC", "BC", 1));
         minTransitions.add(new Transition("DE", "DE", 0));
         minTransitions.add(new Transition("DE", "DE", 1));
+
+        DFA minimizedDFA = new DFA(minStates, minStart, minAccepts, minTransitions);
+
+        assertTrue(minimizedDFA.equals(largeDFA.minimizeDFA(largeDFA)));
+    }
+
+    /**
+     * This is the second minimization test. It is modeled after question 2, from quiz 2.
+     * The example can been seen in its entirety in the README
+     */
+    @Test
+    public void secondDFAMinimizationTest(){
+        String[] statesArray = new String[] {"A", "K", "M", "N", "E", "G"};
+        List largeStates = Arrays.asList(statesArray);
+
+        String largeStart = "A";
+
+        String[] acceptsArray = new String[] {"E", "G"};
+        List largeAccepts = Arrays.asList(acceptsArray);
+
+        List<Transition> largeTransitions = new ArrayList<Transition>();
+        largeTransitions.add(new Transition("A", "E", 0));
+        largeTransitions.add(new Transition("A", "M", 1));
+        largeTransitions.add(new Transition("K", "M", 0));
+        largeTransitions.add(new Transition("K", "N", 1));
+        largeTransitions.add(new Transition("M", "M", 0));
+        largeTransitions.add(new Transition("M", "K", 1));
+        largeTransitions.add(new Transition("N", "K", 0));
+        largeTransitions.add(new Transition("N", "M", 1));
+        largeTransitions.add(new Transition("E", "N", 0));
+        largeTransitions.add(new Transition("E", "G", 1));
+        largeTransitions.add(new Transition("G", "K", 0));
+        largeTransitions.add(new Transition("G", "G", 1));
+
+        DFA largeDFA = new DFA(largeStates, largeStart, largeAccepts, largeTransitions);
+
+        String[] minStatesArray = new String[] {"A", "KMN", "EG"};
+        List minStates = Arrays.asList(minStatesArray);
+
+        String minStart = "A";
+
+        String[] minAcceptsArray = new String[] {"EG"};
+        List minAccepts = Arrays.asList(minAcceptsArray);
+
+        List<Transition> minTransitions = new ArrayList<Transition>();
+        minTransitions.add(new Transition("A", "EG", 0));
+        minTransitions.add(new Transition("A", "KMN", 1));
+        minTransitions.add(new Transition("KMN", "KMN", 0));
+        minTransitions.add(new Transition("KMN", "KMN", 1));
+        minTransitions.add(new Transition("EG", "KMN", 0));
+        minTransitions.add(new Transition("EG", "EG", 1));
 
         DFA minimizedDFA = new DFA(minStates, minStart, minAccepts, minTransitions);
 
