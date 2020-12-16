@@ -232,29 +232,55 @@ public class DFA{
         }
 
         //Now we put it all together to make a new, minimized DFA
-        List<String> states = kEquivalenceTree.get(kEquivalenceTree.size() - 3);
+        List<String> uncompiledStates = kEquivalenceTree.get(kEquivalenceTree.size() - 3);
+        uncompiledStates.add(SEPARATOR);
+        List<String> states = new ArrayList<>();
+        String compiler = "";
+        for(String str : uncompiledStates){
+            if(!str.equals(SEPARATOR)){
+                compiler += str;
+            }else{
+                states.add(compiler);
+                compiler = "";
+            }
+        }
         System.out.println("DFA CREATION TESTING ________________________________________________" + states.size());
         for(String str: states){
-            System.out.println(str);
+            System.out.println(str + "\n");
         }
-        while(states.contains("...")){
-            states.remove("...");
-        }
+
 
 
         String start = dfa.startState;
 
-        //TODO work out list of accept states
+        List<String> accepts = new ArrayList<>();
+        for(String state : states){
+            for(String acceptState: dfa.listAcceptStates){
+                if(state.contains(acceptState)) accepts.add(state);
+            }
+        }
 
-//        String[] acceptsArray = new String[] {"d", "e"};
-//        List accepts = Arrays.asList(acceptsArray);
+        Map<String, String> transitionConversionTable = createTransitionConversionTable(states, dfa.listAllStates);
 
-        //TODO work out list of transitions
+        List<Transition> transitions = new ArrayList<>();
+        for(String state: states){
+            System.out.println("State: " + state);
+            String stateImLookingFor = transitionConversionTable.get(state);
+            System.out.println("stateImLookingFor: " + stateImLookingFor);
+            for(Transition t: dfa.listTransitions){
+                System.out.println("t.start: " + t.start);
+                if(t.start.equals(stateImLookingFor)){
+                    transitions.add(new Transition(state, transitionConversionTable.get(t.end),t.value));
+                    System.out.println("added: " + transitions.get(transitions.size() - 1));
+                }
+            }
+            System.out.println("\n");
+        }
 
-        //TODO assemble and return new DFA
+        System.out.println("\n\nTransitions");
+        for(Transition t: transitions) System.out.println(t.toString());
 
-
-        return null;
+        return new DFA(states, start, accepts, transitions);
     }
 
 
@@ -343,6 +369,38 @@ public class DFA{
 
         }
         return tt;
+    }
+
+    private Map<String, String> createTransitionConversionTable(List<String> newStates, Set<String> oldStates){
+        Map<String, String> conversionTable = new HashMap<>();
+
+        for(String newState: newStates) {
+            Iterator it = oldStates.iterator();
+            while(it.hasNext()){
+                String oldState = (String) it.next();
+                if(newState.contains(oldState)){
+                    conversionTable.put(newState, oldState);
+                    break;
+                }
+            }
+        }
+
+        Iterator it = oldStates.iterator();
+        while(it.hasNext()){
+            String oldState = (String) it.next();
+            for(String newState: newStates) {
+                if(newState.contains(oldState)){
+                    conversionTable.put(oldState, newState);
+                    break;
+                }
+            }
+        }
+
+        for(Map.Entry<String, String> entry: conversionTable.entrySet()){
+            System.out.println(entry.getKey() + " " + entry.getValue());
+        }
+
+        return conversionTable;
     }
 
 }
