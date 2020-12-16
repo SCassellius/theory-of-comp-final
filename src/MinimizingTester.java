@@ -210,6 +210,31 @@ public class MinimizingTester {
     }
 
     /**
+     * This test is to check that a list of strings is correctly
+     * separated into a list of list of strings to store the levels
+     * of equivalence during DFA minimization
+     */
+    @Test
+    public void testOpenEquivalenceTree(){
+        final String SEPARATOR = "...";
+        String[] toadd = new String[]{"D", "E", SEPARATOR, "A", "B", "S", "C"};
+        List<String> complied = Arrays.asList(toadd);
+        List<List> opened = DFA.openEquivalenceTree(complied);
+
+        String correctAnswer = "DE...ABSC";
+        String answerToTest = "";
+        for(List<String> list : opened){
+            for(String str: list){
+                answerToTest+= str;
+            }
+            answerToTest += SEPARATOR;
+        }
+        answerToTest = answerToTest.substring(0, answerToTest.length() - 3);
+
+        assertEquals(correctAnswer, answerToTest);
+    }
+
+    /**
      * This is the first minimization test, it is modeled after the in class example
      * from week 3, lecture 6. The example can been seen in its entirety in the README
      */
@@ -259,7 +284,7 @@ public class MinimizingTester {
 
         DFA minimizedDFA = new DFA(minStates, minStart, minAccepts, minTransitions);
 
-        assertTrue(minimizedDFA.equals(largeDFA.minimize()));
+        assertTrue(minimizedDFA.equals(largeDFA.minimizeDFA(largeDFA)));
     }
 
 

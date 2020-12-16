@@ -143,10 +143,73 @@ public class DFA{
         }
     }
 
+    /**
+     * A k-equivalince DFA minimization method
+     * @param dfa the DFA to minimize
+     * @return a minimized dfa
+     */
     public DFA minimizeDFA(DFA dfa){
-        
+        final int MINIMIZATION_LIMIT = 99;
+        final String SEPARATOR = "...";
+
+        // Preparing 0 equivalence
+        List<List> kEquivalenceTree = new ArrayList<List>();
+        kEquivalenceTree.add(new ArrayList<String>());
+        List<String> eq0 = kEquivalenceTree.get(0);
+
+        for(String str: dfa.listAcceptStates) eq0.add(str);
+
+        eq0.add(SEPARATOR);
+
+        for(String str: dfa.listAllStates){
+            if(!dfa.listAcceptStates.contains(str)) eq0.add(str);
+        }
+
+        /**
+         * This right here, officer.
+         */
+        List<String> eq = kEquivalenceTree.get(0);
+        //for(String str: eq) System.out.println(str);
+
+        //Getting 1 equivalence
+        for(int i = 1; i < MINIMIZATION_LIMIT; i++) {
+            kEquivalenceTree.add(new ArrayList<String>());
+            List<String> previousEQ = kEquivalenceTree.get(i - 1);
+            List<List> workingEquivalenceTree = openEquivalenceTree(previousEQ);
+
+
+
+
+            List<String> thisEQ = kEquivalenceTree.get(i);
+
+        }
+
 
         return null;
+    }
+
+    public static List<List> openEquivalenceTree(List<String> list) {
+        final String SEPARATOR = "...";
+        List<List> tree = new ArrayList<List>();
+        int startingPoint = 0;
+        int numberOfTables = Collections.frequency(list, SEPARATOR);
+
+        for (int i = 0; i <= numberOfTables; i++) {
+            tree.add(new ArrayList<String>());
+            List<String> currentBranch = tree.get(i);
+
+            for (int j = startingPoint; j < list.size(); j++) {
+                String str = list.get(j);
+                if (!str.equals(SEPARATOR)) {
+                    currentBranch.add(str);
+                } else {
+                    startingPoint = j + 1;
+                    break;
+                }
+            }
+        }
+
+        return tree;
     }
 
     /**
