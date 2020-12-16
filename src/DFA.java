@@ -232,10 +232,15 @@ public class DFA{
         }
 
         //Now we put it all together to make a new, minimized DFA
-        List states = kEquivalenceTree.get(kEquivalenceTree.size() - 1);
+        List<String> states = kEquivalenceTree.get(kEquivalenceTree.size() - 3);
+        System.out.println("DFA CREATION TESTING ________________________________________________" + states.size());
+        for(String str: states){
+            System.out.println(str);
+        }
         while(states.contains("...")){
             states.remove("...");
         }
+
 
         String start = dfa.startState;
 
