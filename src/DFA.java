@@ -5,9 +5,11 @@ public class DFA{
     public String startState;
     public Set<String> listAcceptStates;
     public Set<Transition> listTransitions;
+    public Map<String,String[]> transitionTable;
 
     /**
-     * Models a DFA so that I have something to minimize
+     * Models a DFA so that I have something to minimize.
+     * The helper methods insure that a valid, complete, and binary DFA is created
      * @param listStates the set of all states in the DFA, each denoted by a String
      * @param startState the start state for the DFA
      * @param acceptStates the set of accept states for the DFA, each denoted by a string
@@ -20,6 +22,7 @@ public class DFA{
         this.listAcceptStates = verifyAcceptStates(acceptStates);
         this.listTransitions = verifyBasicTransitions(transitions);
         testForIllegalTransitions(listTransitions);
+        this.transitionTable = createTransitionTable(this.listAllStates, this.listTransitions);
     }
 
     /**
@@ -144,5 +147,37 @@ public class DFA{
 //
 //        return ;
 //    }
+
+    /**
+     * This creates the transition table for 'this' DFA. It also check to make
+     * sure that the DFA is complete, meaning that each state has a 0 and a 1 transition.
+     * @param listAllStates
+     * @param listTransitions
+     * @return
+     */
+    private Map<String,String[]> createTransitionTable(Set<String> listAllStates, Set<Transition> listTransitions){
+        Map<String,String[]> tt = new HashMap<String,String[]>();
+        for(String state: listAllStates){
+            String stateZero = "";
+            String stateOne = "";
+
+            for(Transition t: listTransitions){
+                if(t.start.equals(state)){
+                    if(t.value == 0){
+                        stateZero = t.end;
+                    }else{
+                        stateOne = t.end;
+                    }
+                }
+            }
+            if(stateZero.equals("") || stateOne.equals("")) {
+                throw new IllegalArgumentException("A given state does not have either a 0 or a 1 transition, or both");
+            }else{
+                tt.put(state, new String[]{stateZero, stateOne});
+            }
+
+        }
+        return tt;
+    }
 
 }
