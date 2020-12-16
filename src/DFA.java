@@ -143,10 +143,11 @@ public class DFA{
         }
     }
 
-//    private DFA minimize(DFA dfa){
-//
-//        return ;
-//    }
+    public DFA minimizeDFA(DFA dfa){
+        
+
+        return null;
+    }
 
     /**
      * This creates the transition table for 'this' DFA. It also check to make

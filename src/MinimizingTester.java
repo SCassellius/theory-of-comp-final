@@ -209,4 +209,58 @@ public class MinimizingTester {
         assertTrue(expectedMessage.equals(exception.getMessage()), "The correct exception was not thrown");
     }
 
+    /**
+     * This is the first minimization test, it is modeled after the in class example
+     * from week 3, lecture 6. The example can been seen in its entirety in the README
+     */
+    @Test
+    public void firstDFAMinimizationTest(){
+        String[] statesArray = new String[] {"S", "A", "B", "C", "D", "E"};
+        List largeStates = Arrays.asList(statesArray);
+
+        String largeStart = "S";
+
+        String[] acceptsArray = new String[] {"D", "E"};
+        List largeAccepts = Arrays.asList(acceptsArray);
+
+        List<Transition> largeTransitions = new ArrayList<Transition>();
+        largeTransitions.add(new Transition("S", "A", 0));
+        largeTransitions.add(new Transition("S", "B", 1));
+        largeTransitions.add(new Transition("A", "C", 0));
+        largeTransitions.add(new Transition("A", "D", 1));
+        largeTransitions.add(new Transition("B", "B", 0));
+        largeTransitions.add(new Transition("B", "C", 1));
+        largeTransitions.add(new Transition("C", "B", 0));
+        largeTransitions.add(new Transition("C", "C", 1));
+        largeTransitions.add(new Transition("D", "D", 0));
+        largeTransitions.add(new Transition("D", "E", 1));
+        largeTransitions.add(new Transition("E", "E", 0));
+        largeTransitions.add(new Transition("E", "E", 1));
+
+        DFA largeDFA = new DFA(largeStates, largeStart, largeAccepts, largeTransitions);
+
+        String[] minStatesArray = new String[] {"S", "A", "BC", "DE"};
+        List minStates = Arrays.asList(minStatesArray);
+
+        String minStart = "S";
+
+        String[] minAcceptsArray = new String[] {"DE"};
+        List minAccepts = Arrays.asList(minAcceptsArray);
+
+        List<Transition> minTransitions = new ArrayList<Transition>();
+        minTransitions.add(new Transition("S", "A", 0));
+        minTransitions.add(new Transition("S", "BC", 1));
+        minTransitions.add(new Transition("A", "BC", 0));
+        minTransitions.add(new Transition("A", "DE", 1));
+        minTransitions.add(new Transition("BC", "BC", 0));
+        minTransitions.add(new Transition("BC", "BC", 1));
+        minTransitions.add(new Transition("DE", "DE", 0));
+        minTransitions.add(new Transition("DE", "DE", 1));
+
+        DFA minimizedDFA = new DFA(minStates, minStart, minAccepts, minTransitions);
+
+        assertTrue(minimizedDFA.equals(largeDFA.minimize()));
+    }
+
+
 }
