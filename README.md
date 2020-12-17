@@ -1,7 +1,7 @@
 ## Theory of Computation Final Project: 
 ## LMU Fall 2020 CMSI 385-02: Prof. Masahji C. Stewart
  
- ---
+---
 ## First, A letter to my Professor:
 Dear Professor,
 
