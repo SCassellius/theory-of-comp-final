@@ -165,7 +165,7 @@ public class DFA{
             if(!dfa.listAcceptStates.contains(str)) eq0.add(str);
         }
 
-        //Getting 1 equivalence
+        //Getting each equivalence level
         for(int i = 1; i < MINIMIZATION_LIMIT; i++) {
             kEquivalenceTree.add(new ArrayList<String>());
             List<String> previousEQ = kEquivalenceTree.get(i - 1);
@@ -192,15 +192,6 @@ public class DFA{
                     }
                 }
             }
-
-            String answer = "";
-            for(List<String> list : workingEquivalenceTree){
-                for(String str: list){
-                    answer += str;
-                }
-                answer += SEPARATOR;
-            }
-            answer = answer.substring(0, answer.length() - 3);
 
             List<String> thisEQ = closeEquivalenceTree(workingEquivalenceTree);
             kEquivalenceTree.add(thisEQ);
