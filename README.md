@@ -57,7 +57,7 @@ As I listed above, I was unable to find a way to support DFA input in JSON forma
 
 Here is the video of me explaining a little bit about my project, and running the JUnit tests for you.
 
-[Video about the Project](TheoryFinalProject.mp4) <--- If you are having trouble with the link, the video is in the images folder.
+[Video about the Project](https://drive.google.com/file/d/1y6Q0xIz5f3F6NWGzgO-mGkZyEOXORIf3/view?usp=sharing) <--- If you are having trouble with the link, the video is in the images folder.
 
 ---
 
