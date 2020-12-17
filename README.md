@@ -2,7 +2,7 @@
 ## LMU Fall 2020 CMSI 385-02: Prof. Masahji C. Stewart
  
  ---
-## Firstly, A litter to the professor:
+## First, A letter to my Professor:
 Dear Professor,
 
 Here we are at the end of the semester. This year has been a personal hell for me. We already talked earlier in the semester so I will spare you most the the details. I really appreciated your kindness throughout the semester and I thought you made a great professor. From talking to my friends who have had you in they past, they loved you too. Overall, that made me feel even worse for struggling in your class when I knew you would be so able to help, but I just couldn't ask. I was able to see a psychiatrist, and unfortunately it made things a lot worse at first. I am only now starting to get a little bit better. I know I have a bad grade in your class, and a lot of work missing, and that nothing is going to make those assignment magically appear. However I want you to know that I was able to pay attention and try to get things done a lot better after our meeting earlier this semester, even if I don't have much to show for it. Most importantly though, I put why whole heart in this final project to give you a really quality piece of work that is worth a great grade and I hope it will convince you to pass me with a D. 
