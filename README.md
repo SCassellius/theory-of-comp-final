@@ -20,4 +20,13 @@ Sincerely,
 ---
 
 
+## K-Equivalence DFA Minimizer in Java by Seth Cassellius
+### To minimize complete, binary DFAs
 
+My project consists of three classes: DFA, Transition, and MinimizationTester.
+
+1. The DFA: The DFA is a class I made to model a DFA so that I have something to minimize. I could not find any reference DFA.json files online so I had nothing to test against and thus had to create teh DFA from scratch for my project. I know that makes it hard for you to test my code so I have written very intensive tests for you to look over. The DFA has a the complete set of states, the start state, the set of accept states, and the set of transitions. When I feed data into the DFA constructor, it is tested thoroughly for accuracy. All data is cleaned and processed before it the DFA is constructed to ensure that a complete and valid DFA is built. I go in depth into this in the Javadoc comments in my code.
+
+2. The Transition: The Transition is a 3-Tuple I made to store the transitions in between states of the DFA. It has a start state, an end state, and a 0 or a 1 for its transition value.
+
+3. The MinimizationTester: This is the tester file for my project.The tests are written in JUnit and can be run however you normally run JUnit tests. In case you are unfamiliar with running them, I have included a video of me running the tests as proof.
