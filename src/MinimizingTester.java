@@ -370,5 +370,4 @@ public class MinimizingTester {
         assertTrue(minimizedDFA.equals(largeDFA.minimizeDFA(largeDFA)));
     }
 
-
 }

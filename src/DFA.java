@@ -165,36 +165,21 @@ public class DFA{
             if(!dfa.listAcceptStates.contains(str)) eq0.add(str);
         }
 
-        /**
-         * This right here, officer.
-         */
-        List<String> eq = kEquivalenceTree.get(0);
-        for(String str: eq) System.out.println(str);
-
         //Getting 1 equivalence
         for(int i = 1; i < MINIMIZATION_LIMIT; i++) {
             kEquivalenceTree.add(new ArrayList<String>());
             List<String> previousEQ = kEquivalenceTree.get(i - 1);
             List<List> workingEquivalenceTree = openEquivalenceTree(previousEQ);
 
-            System.out.println("\n\nLoop i: ");
 
             for(int j = 0; j < workingEquivalenceTree.size(); j++) {
                 List<String> currentTable = workingEquivalenceTree.get(j);
-
-                System.out.println("Loop j: ");
-                for(String str: currentTable) System.out.println(str);
 
                 for(int k = 0; k < currentTable.size(); k++) {
                     if(currentTable.size() <= 2) break;
 
                     String testState = currentTable.get(k);
-
-                    System.out.println("Loop k: " + testState);
-
                     String[] transitions = dfa.transitionTable.get(testState);
-
-                    System.out.println("t0: " + transitions[0] + "   t1: " + transitions[1]);
 
                     if(currentTable.contains(transitions[0]) && currentTable.contains(transitions[1])) {
                         continue;
@@ -204,15 +189,10 @@ public class DFA{
                         newList.add(testState);
                         workingEquivalenceTree.add(newList);
                         k--;
-                        System.out.println("purged: " + testState + "       New table: ");
-                        for(String str: currentTable) System.out.println(str);
                     }
-
-//                    for(int l = 0; l < workingEquivalenceTree.size(); l++) {
-//                        System.out.println("Loop l: ");
-//                    }
                 }
             }
+
             String answer = "";
             for(List<String> list : workingEquivalenceTree){
                 for(String str: list){
@@ -221,10 +201,6 @@ public class DFA{
                 answer += SEPARATOR;
             }
             answer = answer.substring(0, answer.length() - 3);
-            System.out.println(answer);
-
-
-
 
             List<String> thisEQ = closeEquivalenceTree(workingEquivalenceTree);
             kEquivalenceTree.add(thisEQ);
@@ -244,12 +220,6 @@ public class DFA{
                 compiler = "";
             }
         }
-        System.out.println("DFA CREATION TESTING ________________________________________________" + states.size());
-        for(String str: states){
-            System.out.println(str + "\n");
-        }
-
-
 
         String start = dfa.startState;
 
@@ -262,23 +232,7 @@ public class DFA{
 
         Map<String, String> transitionConversionTable = createTransitionConversionTable(states, dfa.listAllStates);
 
-        List<Transition> transitions = new ArrayList<>();
-        for(String state: states){
-            System.out.println("State: " + state);
-            String stateImLookingFor = transitionConversionTable.get(state);
-            System.out.println("stateImLookingFor: " + stateImLookingFor);
-            for(Transition t: dfa.listTransitions){
-                System.out.println("t.start: " + t.start);
-                if(t.start.equals(stateImLookingFor)){
-                    transitions.add(new Transition(state, transitionConversionTable.get(t.end),t.value));
-                    System.out.println("added: " + transitions.get(transitions.size() - 1));
-                }
-            }
-            System.out.println("\n");
-        }
-
-        System.out.println("\n\nTransitions");
-        for(Transition t: transitions) System.out.println(t.toString());
+        List<Transition> transitions = createMinimizedTransitions(states, dfa, transitionConversionTable);
 
         return new DFA(states, start, accepts, transitions);
     }
@@ -371,6 +325,13 @@ public class DFA{
         return tt;
     }
 
+    /**
+     * This method reads the new minimized states and maps them forwards and backward to the original states
+     * so that a new list of transitions for the minimized table can be made
+     * @param newStates the list of minimized states
+     * @param oldStates the set of original states
+     * @return Key: a state, Value: the correlating state before or after it was minimized
+     */
     private Map<String, String> createTransitionConversionTable(List<String> newStates, Set<String> oldStates){
         Map<String, String> conversionTable = new HashMap<>();
 
@@ -396,11 +357,27 @@ public class DFA{
             }
         }
 
-        for(Map.Entry<String, String> entry: conversionTable.entrySet()){
-            System.out.println(entry.getKey() + " " + entry.getValue());
-        }
-
         return conversionTable;
+    }
+
+    /**
+     * This method creates the new list of transitions for the the minimized DFA
+     * @param states the list of minimized states
+     * @param oldDfa the DFA that was given to be minimized
+     * @param transitionConversionTable a transitionConversionTable to help maneuver between the new and old states
+     * @return a list of transitions for the minimized DFA
+     */
+    private List<Transition> createMinimizedTransitions(List<String> states, DFA oldDfa, Map<String, String> transitionConversionTable ){
+        List<Transition> transitions = new ArrayList<>();
+        for(String state: states){
+            String stateImLookingFor = transitionConversionTable.get(state);
+            for(Transition t: oldDfa.listTransitions){
+                if(t.start.equals(stateImLookingFor)){
+                    transitions.add(new Transition(state, transitionConversionTable.get(t.end),t.value));
+                }
+            }
+        }
+        return transitions;
     }
 
 }
